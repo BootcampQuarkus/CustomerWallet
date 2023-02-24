@@ -1,4 +1,4 @@
-package com.quarkus.bootcamp.nttdata.infraestructure.entity.customer;
+package com.quarkus.bootcamp.nttdata.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.quarkus.bootcamp.nttdata.infraestructure.entity.address.AddressD;
@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CustomerWalletRequest {
-    //private Long id;
-    private String user;
-    private String cellphone;
-    private String password;
-    private double amount;
-    private String fullName;
-    private Long addressId;
-    private Long documentId;
-    private DocumentD document;
-    private AddressD address;
+    //protected Long id;
+    protected String user;
+    protected String cellphone;
+    protected String password;
+    protected double amount;
+    protected String fullName;
+    protected Long addressId;
+    protected Long documentId;
+    protected DocumentD document;
+    protected AddressD address;
 }

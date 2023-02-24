@@ -1,8 +1,9 @@
 package com.quarkus.bootcamp.nttdata.application;
 
-import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWallet;
+import com.quarkus.bootcamp.nttdata.domain.entity.Card;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWallet;
 import com.quarkus.bootcamp.nttdata.domain.services.CustomerWalletService;
-import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWalletRequest;
+import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWalletRequest;
 import com.quarkus.bootcamp.nttdata.infraestructure.dto.ResponseDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -52,4 +53,20 @@ public class CustomerWalletResource {
     public Uni<CustomerWallet> getById(@PathParam("id") String id) {
         return customerWalletService.getById(id);
     }
+
+    @PUT
+    @Path("/{id}")
+    @Transactional
+    public Uni<CustomerWallet> updateCardId(@PathParam("id") String id, Card card) {
+        return customerWalletService.updateCardId(id, card);
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Transactional
+    public Uni<Response> delete(@PathParam("id") String id) {
+        customerWalletService.delete(id);
+        return Uni.createFrom().item(Response.ok().build());
+    }
+
 }

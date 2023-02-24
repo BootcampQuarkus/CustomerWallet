@@ -1,8 +1,9 @@
 package com.quarkus.bootcamp.nttdata.domain.services;
 
-import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWallet;
+import com.quarkus.bootcamp.nttdata.domain.entity.Card;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWallet;
 import com.quarkus.bootcamp.nttdata.domain.respository.CustomerWalletRepository;
-import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWalletRequest;
+import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWalletRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -68,6 +69,20 @@ public class CustomerWalletService {
 
     public Uni<CustomerWallet> getById(String id) {
         return customerWalletRepository.findById(new ObjectId(id));
+    }
+
+    public Uni<CustomerWallet> updateCardId(String id, Card card) {
+        Uni<CustomerWallet> custWallet = customerWalletRepository.findById(new ObjectId(id));
+        return custWallet
+                .onItem().transform(au -> {
+                    au.setCardId(card.getCardId());
+                    return au;
+                }).call(au -> customerWalletRepository.persistOrUpdate(au));
+    }
+
+    public Uni<Void> delete(String id) {
+        Uni<CustomerWallet> custWallet = customerWalletRepository.findById(new ObjectId(id));
+        return custWallet.call(cust -> customerWalletRepository.delete(cust)).replaceWithVoid();
     }
 
 }
