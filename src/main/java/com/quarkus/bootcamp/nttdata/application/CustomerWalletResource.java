@@ -4,13 +4,14 @@ import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWallet;
 import com.quarkus.bootcamp.nttdata.domain.services.CustomerWalletService;
 import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWalletRequest;
 import com.quarkus.bootcamp.nttdata.infraestructure.dto.ResponseDto;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.util.List;
 
 @Path("/customerwallet")
 @Produces(MediaType.APPLICATION_JSON)
@@ -42,14 +43,13 @@ public class CustomerWalletResource {
     }
 
     @GET
-    public Multi<CustomerWallet> list() {
-        return customerWalletService.streamAllPosts();
+    public Uni<List<CustomerWallet>> getAll() {
+        return customerWalletService.getAll();
     }
 
     @GET
     @Path("/{id}")
-    public Uni<Products> getAll(@PathParam("id") Long id) {
-        return service.getAll(id);
+    public Uni<CustomerWallet> getById(@PathParam("id") String id) {
+        return customerWalletService.getById(id);
     }
-
 }

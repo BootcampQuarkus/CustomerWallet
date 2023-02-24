@@ -3,11 +3,13 @@ package com.quarkus.bootcamp.nttdata.domain.services;
 import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWallet;
 import com.quarkus.bootcamp.nttdata.domain.respository.CustomerWalletRepository;
 import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWalletRequest;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
+import org.bson.types.ObjectId;
+
+import java.util.List;
 
 @ApplicationScoped
 public class CustomerWalletService {
@@ -60,7 +62,12 @@ public class CustomerWalletService {
         });
     }
 
-    public Multi<CustomerWallet> streamAllPosts() {
-        return customerWalletRepository.streamAll();
+    public Uni<List<CustomerWallet>> getAll() {
+        return customerWalletRepository.listAll();
     }
+
+    public Uni<CustomerWallet> getById(String id) {
+        return customerWalletRepository.findById(new ObjectId(id));
+    }
+
 }
