@@ -3,6 +3,7 @@ package com.quarkus.bootcamp.nttdata.domain.services;
 import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWallet;
 import com.quarkus.bootcamp.nttdata.domain.respository.CustomerWalletRepository;
 import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWalletRequest;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -57,5 +58,9 @@ public class CustomerWalletService {
                 return customerWalletRepository.findById(c.getId());
             }
         });
+    }
+
+    public Multi<CustomerWallet> streamAllPosts() {
+        return customerWalletRepository.streamAll();
     }
 }
