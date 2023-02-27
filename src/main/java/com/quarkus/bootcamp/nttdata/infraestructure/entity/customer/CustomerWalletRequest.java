@@ -20,4 +20,5 @@ public class CustomerWalletRequest {
     protected Long documentId;
     protected DocumentD document;
     protected AddressD address;
+    protected Long cardId;
 }

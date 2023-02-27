@@ -10,7 +10,6 @@ import org.bson.types.ObjectId;
 @MongoEntity(collection = "customerwallet")
 public class CustomerWallet {
 
-    //@BsonId
     protected ObjectId id;
     protected String user;
     protected String cellphone;
@@ -22,5 +21,4 @@ public class CustomerWallet {
     protected Long documentId;
     protected DocumentD document;
     protected AddressD address;
-
 }

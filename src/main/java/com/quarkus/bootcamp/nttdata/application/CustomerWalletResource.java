@@ -21,13 +21,13 @@ import java.util.List;
 public class CustomerWalletResource {
 
     @Inject
-    CustomerWalletService customerWalletService;
+    CustomerWalletService service;
 
     @POST
     @Path("/register")
     @Transactional
     public Uni<Response> register(CustomerWalletRequest customerWallet) {
-        return customerWalletService.add(customerWallet)
+        return service.add(customerWallet)
                 .onItem().transform(uri ->
                         Response.ok(new ResponseDto<>(200, "Se registro correctamente", uri)).status(200).build());
     }
@@ -35,7 +35,7 @@ public class CustomerWalletResource {
     @POST
     @Path("/login")
     public Uni<Response> login(CustomerWalletRequest customerWallet) {
-        return customerWalletService.login(customerWallet).onItem().transform(cw -> {
+        return service.login(customerWallet).onItem().transform(cw -> {
             if (cw.getPassword().equals(customerWallet.getPassword())) {
                 return Response.ok(new ResponseDto<>(200, "login successed")).status(200).build();
             } else {
@@ -46,13 +46,19 @@ public class CustomerWalletResource {
 
     @GET
     public Uni<List<CustomerWallet>> getAll() {
-        return customerWalletService.getAll();
+        return service.getAll();
     }
 
     @GET
     @Path("/{id}")
     public Uni<CustomerWallet> getById(@PathParam("id") String id) {
-        return customerWalletService.getById(id);
+        return service.getById(id);
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Uni<CustomerWallet> update(@PathParam("id") String id, CustomerWalletRequest request) {
+        return service.update(id, request);
     }
 
     @PUT
