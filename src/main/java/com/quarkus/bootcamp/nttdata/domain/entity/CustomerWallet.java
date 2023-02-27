@@ -16,9 +16,9 @@ public class CustomerWallet {
     protected String password;
     protected double amount;
     protected String fullName;
+    protected Long cardId = null;
     protected Long addressId;
     protected Long documentId;
     protected DocumentD document;
     protected AddressD address;
-    protected Long cardId;
 }

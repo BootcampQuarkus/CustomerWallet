@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CustomerWalletRequest {
-    //private Long id;
+    //protected Long id;
     protected String user;
     protected String cellphone;
     protected String password;

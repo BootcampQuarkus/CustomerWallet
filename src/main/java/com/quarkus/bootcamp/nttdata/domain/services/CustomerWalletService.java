@@ -1,7 +1,9 @@
 package com.quarkus.bootcamp.nttdata.domain.services;
 
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.card.Card;
 import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWallet;
 import com.quarkus.bootcamp.nttdata.domain.respository.CustomerWalletRepository;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.Amount;
 import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWalletRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -70,14 +72,42 @@ public class CustomerWalletService {
         return customerWalletRepository.findById(new ObjectId(id));
     }
 
-    public Uni<CustomerWallet> update(String id, CustomerWalletRequest customerWallet) {
-        Uni<CustomerWallet> findUser = findCustomerWalletByUser(customerWallet.getUser());
-        return findUser.onItem().transformToUni(user -> {
-            if (user == null) {
-                throw new NotFoundException("user is already registered");
-            }
-            user.setCardId(customerWallet.getCardId());
-            return customerWalletRepository.update(user);
-        });
+    public Uni<CustomerWallet> updateCardId(String id, Card card) {
+        Uni<CustomerWallet> custWallet = customerWalletRepository.findById(new ObjectId(id));
+        return custWallet
+                .onItem().transform(au -> {
+                    au.setCardId(card.getCardId());
+                    return au;
+                }).call(au -> customerWalletRepository.persistOrUpdate(au));
     }
+
+    public Uni<Void> delete(String id) {
+        Uni<CustomerWallet> custWallet = customerWalletRepository.findById(new ObjectId(id));
+        return custWallet.call(cust -> customerWalletRepository.delete(cust)).replaceWithVoid();
+    }
+
+    public Uni<CustomerWallet> findByCellphone(String cellphone) {
+        return customerWalletRepository.find("cellphone", cellphone).firstResult();
+    }
+
+    public Uni<CustomerWallet> updateAmount(String id, Amount amount) {
+        boolean flagCompensation = true;
+        Uni<CustomerWallet> custWallet = customerWalletRepository.findById(new ObjectId(id));
+        if (amount.getOperation().equalsIgnoreCase("Discount")) {
+            flagCompensation = false;
+        } else if (amount.getOperation().equalsIgnoreCase("Compensation")) {
+            flagCompensation = true;
+        }
+        boolean finalFlagCompensation = flagCompensation;
+        return custWallet
+                .onItem().transform(au -> {
+                    if (finalFlagCompensation == true) {
+                        au.setAmount(au.getAmount() + amount.getAmount());
+                    } else {
+                        au.setAmount(au.getAmount() - amount.getAmount());
+                    }
+                    return au;
+                }).call(au -> customerWalletRepository.persistOrUpdate(au));
+    }
+
 }
