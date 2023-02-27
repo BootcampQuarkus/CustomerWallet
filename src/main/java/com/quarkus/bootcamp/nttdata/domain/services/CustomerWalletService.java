@@ -70,4 +70,14 @@ public class CustomerWalletService {
         return customerWalletRepository.findById(new ObjectId(id));
     }
 
+    public Uni<CustomerWallet> update(String id, CustomerWalletRequest customerWallet) {
+        Uni<CustomerWallet> findUser = findCustomerWalletByUser(customerWallet.getUser());
+        return findUser.onItem().transformToUni(user -> {
+            if (user == null) {
+                throw new NotFoundException("user is already registered");
+            }
+            user.setCardId(customerWallet.getCardId());
+            return customerWalletRepository.update(user);
+        });
+    }
 }

@@ -10,15 +10,15 @@ import org.bson.types.ObjectId;
 @MongoEntity(collection = "customerwallet")
 public class CustomerWallet {
 
-    //@BsonId
-    private ObjectId id;
-    private String user;
-    private String cellphone;
-    private String password;
-    private double amount;
-    private String fullName;
-    private Long addressId;
-    private Long documentId;
-    private DocumentD document;
-    private AddressD address;
+    protected ObjectId id;
+    protected String user;
+    protected String cellphone;
+    protected String password;
+    protected double amount;
+    protected String fullName;
+    protected Long addressId;
+    protected Long documentId;
+    protected DocumentD document;
+    protected AddressD address;
+    protected Long cardId;
 }

@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CustomerWalletRequest {
     //private Long id;
-    private String user;
-    private String cellphone;
-    private String password;
-    private double amount;
-    private String fullName;
-    private Long addressId;
-    private Long documentId;
-    private DocumentD document;
-    private AddressD address;
+    protected String user;
+    protected String cellphone;
+    protected String password;
+    protected double amount;
+    protected String fullName;
+    protected Long addressId;
+    protected Long documentId;
+    protected DocumentD document;
+    protected AddressD address;
+    protected Long cardId;
 }
