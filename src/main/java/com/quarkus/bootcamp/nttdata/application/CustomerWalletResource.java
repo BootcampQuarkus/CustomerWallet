@@ -56,30 +56,24 @@ public class CustomerWalletResource {
     }
 
     @PUT
-    @Path("/{id}")
-    public Uni<CustomerWallet> update(@PathParam("id") String id, CustomerWalletRequest request) {
-        return service.update(id, request);
-    }
-
-    @PUT
     @Path("/card/{id}")
     @Transactional
     public Uni<CustomerWallet> updateCardId(@PathParam("id") String id, Card card) {
-        return customerWalletService.updateCardId(id, card);
+        return service.updateCardId(id, card);
     }
 
     @DELETE
     @Path("/{id}")
     @Transactional
     public Uni<Response> delete(@PathParam("id") String id) {
-        customerWalletService.delete(id);
+        service.delete(id);
         return Uni.createFrom().item(Response.ok().build());
     }
 
     @GET
     @Path("/cellphone/{cellphone}")
     public Uni<CustomerWallet> viewCustomerByCellphone(@PathParam("cellphone") String cellphone) {
-        Uni<CustomerWallet> entity = customerWalletService.findByCellphone(cellphone);
+        Uni<CustomerWallet> entity = service.findByCellphone(cellphone);
         if (entity == null) {
             throw new WebApplicationException("Loan with " + cellphone + " does not exist.", 404);
         }
@@ -90,7 +84,6 @@ public class CustomerWalletResource {
     @Path("/amount/{id}")
     @Transactional
     public Uni<CustomerWallet> updateAmount(@PathParam("id") String id, Amount amount) {
-        return customerWalletService.updateAmount(id, amount);
+        return service.updateAmount(id, amount);
     }
-
 }
