@@ -1,4 +1,4 @@
-package com.quarkus.bootcamp.nttdata.domain.entity;
+package com.quarkus.bootcamp.nttdata.infraestructure.entity.customer;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.quarkus.bootcamp.nttdata.infraestructure.entity.address.AddressD;

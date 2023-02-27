@@ -1,4 +1,4 @@
-package com.quarkus.bootcamp.nttdata.domain.entity;
+package com.quarkus.bootcamp.nttdata.infraestructure.entity.card;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

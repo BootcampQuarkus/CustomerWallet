@@ -1,9 +1,10 @@
 package com.quarkus.bootcamp.nttdata.application;
 
-import com.quarkus.bootcamp.nttdata.domain.entity.Card;
-import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWallet;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.card.Card;
+import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWallet;
 import com.quarkus.bootcamp.nttdata.domain.services.CustomerWalletService;
-import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWalletRequest;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.Amount;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWalletRequest;
 import com.quarkus.bootcamp.nttdata.infraestructure.dto.ResponseDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -55,7 +56,7 @@ public class CustomerWalletResource {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/card/{id}")
     @Transactional
     public Uni<CustomerWallet> updateCardId(@PathParam("id") String id, Card card) {
         return customerWalletService.updateCardId(id, card);
@@ -67,6 +68,23 @@ public class CustomerWalletResource {
     public Uni<Response> delete(@PathParam("id") String id) {
         customerWalletService.delete(id);
         return Uni.createFrom().item(Response.ok().build());
+    }
+
+    @GET
+    @Path("/cellphone/{cellphone}")
+    public Uni<CustomerWallet> viewCustomerByCellphone(@PathParam("cellphone") String cellphone) {
+        Uni<CustomerWallet> entity = customerWalletService.findByCellphone(cellphone);
+        if (entity == null) {
+            throw new WebApplicationException("Loan with " + cellphone + " does not exist.", 404);
+        }
+        return entity;
+    }
+
+    @PUT
+    @Path("/amount/{id}")
+    @Transactional
+    public Uni<CustomerWallet> updateAmount(@PathParam("id") String id, Amount amount) {
+        return customerWalletService.updateAmount(id, amount);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.quarkus.bootcamp.nttdata.infraestructure.entity.customer;
+package com.quarkus.bootcamp.nttdata.domain.entity;
 
 import com.quarkus.bootcamp.nttdata.infraestructure.entity.address.AddressD;
 import com.quarkus.bootcamp.nttdata.infraestructure.entity.document.DocumentD;

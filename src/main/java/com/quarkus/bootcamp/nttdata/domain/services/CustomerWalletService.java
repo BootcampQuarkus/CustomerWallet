@@ -1,9 +1,10 @@
 package com.quarkus.bootcamp.nttdata.domain.services;
 
-import com.quarkus.bootcamp.nttdata.domain.entity.Card;
-import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWallet;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.card.Card;
+import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWallet;
 import com.quarkus.bootcamp.nttdata.domain.respository.CustomerWalletRepository;
-import com.quarkus.bootcamp.nttdata.domain.entity.CustomerWalletRequest;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.Amount;
+import com.quarkus.bootcamp.nttdata.infraestructure.entity.customer.CustomerWalletRequest;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -83,6 +84,30 @@ public class CustomerWalletService {
     public Uni<Void> delete(String id) {
         Uni<CustomerWallet> custWallet = customerWalletRepository.findById(new ObjectId(id));
         return custWallet.call(cust -> customerWalletRepository.delete(cust)).replaceWithVoid();
+    }
+
+    public Uni<CustomerWallet> findByCellphone(String cellphone) {
+        return customerWalletRepository.find("cellphone", cellphone).firstResult();
+    }
+
+    public Uni<CustomerWallet> updateAmount(String id, Amount amount) {
+        boolean flagCompensation = true;
+        Uni<CustomerWallet> custWallet = customerWalletRepository.findById(new ObjectId(id));
+        if (amount.getOperation().equalsIgnoreCase("Discount")) {
+            flagCompensation = false;
+        } else if (amount.getOperation().equalsIgnoreCase("Compensation")) {
+            flagCompensation = true;
+        }
+        boolean finalFlagCompensation = flagCompensation;
+        return custWallet
+                .onItem().transform(au -> {
+                    if (finalFlagCompensation == true) {
+                        au.setAmount(au.getAmount() + amount.getAmount());
+                    } else {
+                        au.setAmount(au.getAmount() - amount.getAmount());
+                    }
+                    return au;
+                }).call(au -> customerWalletRepository.persistOrUpdate(au));
     }
 
 }
